@@ -103,24 +103,24 @@ else { // Logged in.
 			$newPassword1 = $db->real_escape_string($_POST['password1']);
 			$newPassword2 = $db->real_escape_string($_POST['password2']);
 			If ($newPassword1 != $newPassword2) {
-				header('Location: ' . $thisScript . '?message=passwordsDoNotMatch#drawer-settings');
+				header('Location: ' . $thisScript . '?message=passwordsDoNotMatch#drawer-password');
 				die();
 			}
 			If (strlen($newPassword1) < 1 || strlen($newPassword1) > 256) {
-				header('location: ' . $thisScript . '?message=passwordLength#drawer-settings');
+				header('location: ' . $thisScript . '?message=passwordLength#drawer-password');
 				die();
 			}
 
 			$resetQuery = "SELECT username, password FROM users WHERE username = '$username';";
 			$resetResult = $db->query($resetQuery) or die ($db->error);
 			If ($resetResult->num_rows < 1) {
-				header('location: ' . $thisScript . '?message=incorrectUser#drawer-settings');
+				header('location: ' . $thisScript . '?message=incorrectUser#drawer-password');
 				die();
 			}
 			$resetData = $resetResult->fetch_assoc();
 			$databasePassword = $resetData['password'];
 			if (validate_password($currentPassword, $databasePassword) === FALSE) {
-				header('Location: ' . $thisScript . '?message=incorrectPassword#drawer-settings');
+				header('Location: ' . $thisScript . '?message=incorrectPassword#drawer-password');
 				die();
 			}
 			$resetResult->free();
@@ -164,14 +164,14 @@ else { // Logged in.
 	</div>
 
 <?php
-	// Generate Settings page.
+	// Generate password page.
 	$passwordArray = array(
 		array("Current Password", "password", "password0", ""),
 		array("New Password", "password", "password1", ""),
 		array("New Password", "password", "password2", ""),
 		array("", "hidden", "action", "setPassword")
 	);
-	print $mobClass->newDrawer('settings', 'Settings', 'Change Password', TRUE, $passwordArray, $messageCode);
+	print $mobClass->newDrawer('password', 'Password', 'Change Password', TRUE, $passwordArray, $messageCode);
 
 	// Generate Logout page.
 	$my_array = array(
@@ -196,7 +196,7 @@ else { // Logged in.
 		</ul>
 	</div>
 
-	<div data-role="drawer" id="my-drawer" style="width: 270px" data-views="['drawer-home', 'drawer-login', 'drawer-edit', 'drawer-logout', 'drawer-settings']">
+	<div data-role="drawer" id="my-drawer" style="width: 270px" data-views="['drawer-home', 'drawer-login', 'drawer-edit', 'drawer-logout', 'drawer-password']">
 		<ul data-role="listview" data-type="group">
 <?php
  if ($mobClass->loggedIn($username, $userID)) {
@@ -207,7 +207,7 @@ print '			<li>menu
 			</li>
 			<li>Account
 				<ul>
-					<li data-icon="settings"><a href="#drawer-settings" data-transition="none">Settings</a></li>
+					<li data-icon="settings"><a href="#drawer-password" data-transition="none">Password</a></li>
 					<li data-icon="off"><a href="#drawer-logout" data-transition="none">Log Out</a></li>' . "\r\n";
 }
 else {
@@ -219,7 +219,7 @@ print '
 			</li>
 			<li>Account
 				<ul>
-					<li data-icon="settings">Settings</li>
+					<li data-icon="settings">Password</li>
 					<li data-icon="off"><a href="#drawer-login" data-transition="none">Log In</a></li>' . "\r\n";
 }
 ?>
